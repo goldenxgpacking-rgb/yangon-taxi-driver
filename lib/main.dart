@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'screens/login_screen.dart';
+import 'screens/otp_screen.dart';
+import 'screens/driver_profile_screen.dart';
+import 'screens/vehicle_info_screen.dart';
+import 'screens/document_upload_screen.dart';
 import 'screens/home_screen.dart';
 
 void main() async {
@@ -35,6 +39,10 @@ class YangonTaxiDriverApp extends StatelessWidget {
       initialRoute: '/login',
       routes: {
         '/login': (context) => const LoginScreen(),
+        '/otp': (context) => const OTPScreen(phoneNumber: ''),
+        '/driver-profile': (context) => const DriverProfileScreen(),
+        '/vehicle-info': (context) => const VehicleInfoScreen(),
+        '/documents': (context) => const DocumentUploadScreen(),
         '/home': (context) => const HomeScreen(),
       },
     );

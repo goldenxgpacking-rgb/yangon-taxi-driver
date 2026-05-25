@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'home_screen.dart';
+import 'driver_profile_screen.dart';
 
 class OTPScreen extends StatefulWidget {
   final String phoneNumber;
@@ -52,10 +52,11 @@ class _OTPScreenState extends State<OTPScreen> {
       });
 
       if (otp == '123456') {
-        // Navigate to Home Screen
+        // Navigate to driver profile screen for registration
+        // TODO: Check if driver already registered, if yes -> HomeScreen
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => const HomeScreen(),
+            builder: (context) => const DriverProfileScreen(),
           ),
         );
       } else {
