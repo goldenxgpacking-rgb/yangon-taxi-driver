@@ -4,36 +4,49 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.6.0 <4.0.0'
+  sdk: ^3.6.0
+  flutter: ^3.27.4
 
 dependencies:
   flutter:
     sdk: flutter
-  
-  # 核心UI
+
+  # 基础UI
   google_fonts: ^6.1.0
   cupertino_icons: ^1.0.8
-  
-  # 状态管理
-  shared_preferences: ^2.3.2
-  provider: ^6.1.1
-  
-  # 地图与定位
-  google_maps_flutter: ^2.10.0
-  geolocator: ^13.0.2
-  permission_handler: ^11.3.1
-  
-  # OTP
+
+  # 登录/OTP
   sms_autofill: ^2.4.1
   pin_input_text_field: ^4.5.2
-  
+
+  # 状态管理 & 存储
+  provider: ^6.1.1
+  shared_preferences: ^2.3.2
+  flutter_secure_storage: ^9.0.0
+
+  # 地图 & 定位
+  google_maps_flutter: ^2.10.0
+  geolocator: ^13.0.2
+  geocoding: ^3.0.0
+  permission_handler: ^11.3.1
+
   # 网络
-  http: ^1.0.0
-  
+  http: ^1.1.0
+  path_provider: ^2.1.1
+
+  # 本地通知
+  flutter_local_notifications: ^17.2.3
+
+  # 图片选择
+  image_picker: ^1.1.2
+
   # 多语言
   flutter_localizations:
     sdk: flutter
   intl: ">=0.19.0 <1.0.0"
+
+  # 工具
+  url_launcher: ^6.3.1
 
 dev_dependencies:
   flutter_test:
