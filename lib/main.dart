@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'screens/login_screen.dart';
-import 'screens/otp_screen.dart';
-import 'screens/driver_profile_screen.dart';
-import 'screens/vehicle_info_screen.dart';
-import 'screens/document_upload_screen.dart';
-import 'screens/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,11 +15,9 @@ class YangonTaxiDriverApp extends StatelessWidget {
     return MaterialApp(
       title: 'Yangon Taxi Driver',
       debugShowCheckedModeBanner: false,
-      
-      // Theme Configuration (Yangon Gold + Deep Blue Black)
       theme: ThemeData(
-        primaryColor: const Color(0xFFFFD700), // Yangon Gold
-        scaffoldBackgroundColor: const Color(0xFF1A1A2E), // Deep Blue Black
+        primaryColor: const Color(0xFFFFD700),
+        scaffoldBackgroundColor: const Color(0xFF1A1A2E),
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color(0xFFFFD700),
           brightness: Brightness.dark,
@@ -34,17 +27,7 @@ class YangonTaxiDriverApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      
-      // Routes
-      initialRoute: '/login',
-      routes: {
-        '/login': (context) => const LoginScreen(),
-        '/otp': (context) => const OTPScreen(phoneNumber: ''),
-        '/driver-profile': (context) => const DriverProfileScreen(),
-        '/vehicle-info': (context) => const VehicleInfoScreen(),
-        '/documents': (context) => const DocumentUploadScreen(),
-        '/home': (context) => const HomeScreen(),
-      },
+      home: const LoginScreen(),
     );
   }
 }
