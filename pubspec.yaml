@@ -17,12 +17,22 @@ dependencies:
   # 安全存储
   flutter_secure_storage: ^8.0.0
 
+  # 位置 & 权限
+  geolocator: ^11.0.0
+  permission_handler: ^11.3.1
+
+  # 文件 & 图片
+  path_provider: ^2.1.1
+  image_picker: ^1.1.2
+
   # 状态管理 & 存储
   provider: ^6.1.1
   shared_preferences: ^2.3.2
 
-  # 网络
+  # 网络 & 工具
   http: ^1.1.0
+  url_launcher: ^6.3.1
+  package_info_plus: ^8.1.0
 
   # 多语言
   flutter_localizations:
