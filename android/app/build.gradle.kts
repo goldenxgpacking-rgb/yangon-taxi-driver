@@ -1,10 +1,11 @@
 plugins {
     id("com.android.application")
+    id("kotlin-android")
     id("dev.flutter.flutter-gradle-plugin")
 }
 
 android {
-    namespace = "com.yangontaxi.yangon_taxi_driver"
+    namespace = "com.yangontaxi.driver"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -14,10 +15,14 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17.toString()
+    }
+
     defaultConfig {
         applicationId = "com.yangontaxi.driver"
         minSdk = 21
-        targetSdk = 34
+        targetSdk = flutter.targetSdkVersion
         versionCode = 1
         versionName = "1.0.0"
     }
@@ -29,10 +34,10 @@ android {
     }
 }
 
-dependencies {
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
-}
-
 flutter {
     source = "../.."
+}
+
+dependencies {
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 }
