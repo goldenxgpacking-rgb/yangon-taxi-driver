@@ -5,13 +5,12 @@ version: 1.0.0+1
 
 environment:
   sdk: ^3.6.0
-  flutter: ^3.27.4
 
 dependencies:
   flutter:
     sdk: flutter
 
-  # 基础UI
+  # UI
   google_fonts: ^6.1.0
   cupertino_icons: ^1.0.8
 
@@ -22,12 +21,10 @@ dependencies:
   # 状态管理 & 存储
   provider: ^6.1.1
   shared_preferences: ^2.3.2
-  flutter_secure_storage: ^9.0.0
+  flutter_secure_storage: ^8.0.0
 
   # 地图 & 定位
-  google_maps_flutter: ^2.10.0
-  geolocator: ^13.0.2
-  geocoding: ^3.0.0
+  geolocator: ^11.0.0
   permission_handler: ^11.3.1
 
   # 网络
@@ -35,7 +32,7 @@ dependencies:
   path_provider: ^2.1.1
 
   # 本地通知
-  flutter_local_notifications: ^17.2.3
+  flutter_local_notifications: ^16.3.3
 
   # 图片选择
   image_picker: ^1.1.2
