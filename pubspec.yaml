@@ -17,7 +17,10 @@ dependencies:
   # 安全存储
   flutter_secure_storage: ^8.0.0
 
-  # 权限管理（单独测试）
+  # 定位（降级到 v10）
+  geolocator: ^10.0.0
+
+  # 权限管理
   permission_handler: ^11.3.1
 
   # 文件 & 图片
