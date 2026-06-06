@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'screens/login_screen.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+void main() {
   runApp(const YangonTaxiDriverApp());
 }
 
@@ -27,7 +25,12 @@ class YangonTaxiDriverApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const LoginScreen(),
+      home: Scaffold(
+        appBar: AppBar(title: const Text('Yangon Taxi Driver')),
+        body: const Center(
+          child: Text('Build Test - Minimal', style: TextStyle(color: Colors.white)),
+        ),
+      ),
     );
   }
 }

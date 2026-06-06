@@ -14,39 +14,16 @@ dependencies:
   google_fonts: ^6.1.0
   cupertino_icons: ^1.0.8
 
-  # 登录/OTP
-  sms_autofill: ^2.4.1
-  pin_input_text_field: ^4.5.2
-
   # 状态管理 & 存储
-  provider: ^6.1.1
   shared_preferences: ^2.3.2
-  flutter_secure_storage: ^8.0.0
-
-  # 地图 & 定位
-  geolocator: ^11.0.0
-  permission_handler: ^11.3.1
 
   # 网络
   http: ^1.1.0
-  path_provider: ^2.1.1
-
-  # 本地通知（暂时移除：^16.3.3 与 Android API 33+ 编译冲突，等官方修复后重新启用）
-  # flutter_local_notifications: ^16.3.3
-
-  # 图片选择
-  image_picker: ^1.1.2
 
   # 多语言
   flutter_localizations:
     sdk: flutter
   intl: ">=0.19.0 <1.0.0"
-
-  # 工具
-  url_launcher: ^6.3.1
-
-  # 版本信息
-  package_info_plus: ^8.1.0
 
 dev_dependencies:
   flutter_test:
