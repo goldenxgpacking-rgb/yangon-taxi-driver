@@ -1,4 +1,4 @@
-package com.yangontaxi.yangon_taxi_driver
+package com.yangontaxi.driver
 
 import io.flutter.embedding.android.FlutterActivity
 
