@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-// import 'otp_screen.dart'; // TODO: re-enable after fixing CI
+import 'otp_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -43,8 +43,12 @@ class _LoginScreenState extends State<LoginScreen> {
         _isLoading = false;
       });
 
-      // TODO: Navigate to OTP screen after fixing CI
-      _showSnackBar('OTP sent to +95$phone (mock)');
+      // Navigate to OTP screen
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => OTPScreen(phoneNumber: '+95$phone'),
+        ),
+      );
     });
   }
 
