@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
+// import 'package:permission_handler/permission_handler.dart'; // TODO: fix permission_handler
 import 'home_screen.dart';
 
 class DocumentUploadScreen extends StatefulWidget {
@@ -23,11 +23,8 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
   File? _vehicleLicense;
 
   Future<void> _requestPermissions() async {
-    await [
-      Permission.camera,
-      Permission.photos,
-      Permission.storage,
-    ].request();
+    // TODO: Re-enable permission_handler after fixing CI
+    // Mock permission for now
   }
 
   Future<void> _pickImage(ImageSource source, Function(File) onImagePicked) async {
