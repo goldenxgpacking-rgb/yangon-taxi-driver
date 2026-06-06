@@ -14,9 +14,8 @@ dependencies:
   google_fonts: ^6.1.0
   cupertino_icons: ^1.0.8
 
-  # 登录/OTP
-  sms_autofill: ^2.4.1
-  pin_input_text_field: ^4.5.2
+  # 安全存储
+  flutter_secure_storage: ^8.0.0
 
   # 状态管理 & 存储
   provider: ^6.1.1
