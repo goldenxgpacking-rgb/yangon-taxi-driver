@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:geolocator/geolocator.dart';
-// import 'package:permission_handler/permission_handler.dart'; // Already tested separately
+import 'package:permission_handler/permission_handler.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -34,29 +33,13 @@ class _HomeScreenState extends State<HomeScreen> {
       status = await Permission.location.request();
     }
 
-    if (status.isGranted) {
-      try {
-        // Geolocator v10 API (different from v11)
-        Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high,
-        );
-        setState(() {
-          _currentAddress =
-              'Lat: ${position.latitude.toStringAsFixed(4)}, Lng: ${position.longitude.toStringAsFixed(4)}';
-          _isLoadingLocation = false;
-        });
-      } catch (e) {
-        setState(() {
-          _currentAddress = 'Unable to get location';
-          _isLoadingLocation = false;
-        });
-      }
-    } else {
-      setState(() {
-        _currentAddress = 'Location permission denied';
-        _isLoadingLocation = false;
-      });
-    }
+    // TODO: Replace with real geolocation after backend integration
+    // Currently using mock location (Yangon City Hall)
+    await Future.delayed(const Duration(milliseconds: 500));
+    setState(() {
+      _currentAddress = 'Yangon, Myanmar (16.8661, 96.1951)';
+      _isLoadingLocation = false;
+    });
   }
 
   void _toggleOnlineStatus() {
