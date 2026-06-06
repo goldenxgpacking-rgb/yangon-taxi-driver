@@ -27,7 +27,7 @@ jobs:
         run: flutter pub get
 
       - name: Build Debug APK
-        run: flutter build apk --debug --stacktrace
+        run: flutter build apk --debug
         env:
           JAVA_OPTS: "-Xmx4g"
           GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
