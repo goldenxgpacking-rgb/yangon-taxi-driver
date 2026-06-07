@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'order_center_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -42,10 +43,25 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  void _toggleOnlineStatus() {
-    setState(() {
-      _isOnline = !_isOnline;
-    });
+  void _toggleOnlineStatus() async {
+    if (!_isOnline) {
+      // Going online → navigate to order center
+      final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const OrderCenterScreen(),
+        ),
+      );
+      // When coming back from order center, stay online
+      setState(() {
+        _isOnline = true;
+      });
+    } else {
+      // Going offline
+      setState(() {
+        _isOnline = false;
+      });
+    }
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
