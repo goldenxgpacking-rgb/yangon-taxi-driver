@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 import 'driver_profile_screen.dart';
 
 class OTPScreen extends StatefulWidget {
@@ -11,68 +13,96 @@ class OTPScreen extends StatefulWidget {
   State<OTPScreen> createState() => _OTPScreenState();
 }
 
-class _OTPScreenState extends State<OTPScreen> {
-  final List<TextEditingController> _controllers = List.generate(
-    6,
-    (index) => TextEditingController(),
-  );
-  final List<FocusNode> _focusNodes = List.generate(
-    6,
-    (index) => FocusNode(),
-  );
-  bool _isVerifying = false;
+class _OTPScreenState extends State<OTPScreen> with CodeAutoFill {
+  String _otpCode = '';
+  int _resendSeconds = 60;
+  bool _canResend = false;
+  bool _autoFilled = false;
+  late TextEditingController _pinController;
 
   @override
-  void dispose() {
-    for (var controller in _controllers) {
-      controller.dispose();
-    }
-    for (var node in _focusNodes) {
-      node.dispose();
-    }
-    super.dispose();
+  void initState() {
+    super.initState();
+    _pinController = TextEditingController();
+    _startResendTimer();
+    _initSmsAutoFill();
+    _simulateAutoFill(); // 测试用：2秒后自动填入
   }
 
-  void _verifyOTP() {
-    String otp = _controllers.map((c) => c.text).join();
-    
-    if (otp.length != 6) {
-      _showSnackBar('Please enter complete OTP');
-      return;
-    }
+  void _initSmsAutoFill() {
+    listenForCode();
+  }
 
-    setState(() {
-      _isVerifying = true;
-    });
-
-    // Mock: OTP is 123456
-    Future.delayed(const Duration(seconds: 1), () {
-      setState(() {
-        _isVerifying = false;
-      });
-
-      if (otp == '123456') {
-        // Navigate to driver profile screen for registration
-        // TODO: Check if driver already registered, if yes -> HomeScreen
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => const DriverProfileScreen(),
-          ),
-        );
-      } else {
-        _showSnackBar('Invalid OTP. Please try again.');
+  // 自动填入测试验证码（模拟真实 SMS 读取）
+  void _simulateAutoFill() {
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted && !_autoFilled) {
+        setState(() {
+          _otpCode = '123456';
+          _autoFilled = true;
+        });
+        _pinController.text = '123456';
+        _verifyOTP();
       }
     });
   }
 
-  void _showSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: const Color(0xFFFFD700),
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
+  @override
+  void codeUpdated() {
+    // 真实 SMS 读取时会触发这里
+    if (mounted && code != null && code!.length == 6) {
+      setState(() {
+        _otpCode = code!;
+        _autoFilled = true;
+      });
+      _pinController.text = code!;
+      _verifyOTP();
+    }
+  }
+
+  void _startResendTimer() {
+    Future.delayed(const Duration(seconds: 1), () {
+      if (mounted) {
+        setState(() {
+          if (_resendSeconds > 0) {
+            _resendSeconds--;
+            _startResendTimer();
+          } else {
+            _canResend = true;
+          }
+        });
+      }
+    });
+  }
+
+  void _verifyOTP() {
+    if (_otpCode == '123456') {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('验证成功！正在跳转...'),
+          backgroundColor: Colors.green,
+          behavior: SnackBarBehavior.floating,
+          duration: Duration(seconds: 1),
+        ),
+      );
+      Future.delayed(const Duration(seconds: 1), () {
+        if (mounted) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (context) => const DriverProfileScreen(),
+            ),
+          );
+        }
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('验证码错误，请重试'),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
   }
 
   @override
@@ -83,8 +113,15 @@ class _OTPScreenState extends State<OTPScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: Color(0xFFFFD700)),
           onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          '验证码',
+          style: GoogleFonts.poppins(
+            color: const Color(0xFFFFD700),
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
       body: SafeArea(
@@ -94,120 +131,124 @@ class _OTPScreenState extends State<OTPScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 40),
-              
               Text(
-                'Verify OTP',
-                style: GoogleFonts.poppins(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: const Color(0xFFFFD700),
-                ),
+                '我们已向',
                 textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 16),
-              
-              Text(
-                'Enter the 6-digit code sent to\n${widget.phoneNumber}',
                 style: GoogleFonts.poppins(
-                  fontSize: 14,
+                  fontSize: 16,
                   color: Colors.white70,
                 ),
-                textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 60),
-              
-              // OTP Input Boxes
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: List.generate(6, (index) {
-                  return SizedBox(
-                    width: 45,
-                    child: TextField(
-                      controller: _controllers[index],
-                      focusNode: _focusNodes[index],
-                      keyboardType: TextInputType.number,
-                      textAlign: TextAlign.center,
-                      maxLength: 1,
-                      style: GoogleFonts.poppins(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                      decoration: InputDecoration(
-                        counterText: '',
-                        filled: true,
-                        fillColor: Colors.white10,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: BorderSide.none,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: const BorderSide(
-                            color: Color(0xFFFFD700),
-                            width: 2,
-                          ),
-                        ),
-                      ),
-                      onChanged: (value) {
-                        if (value.isNotEmpty && index < 5) {
-                          _focusNodes[index + 1].requestFocus();
-                        }
-                        if (value.isEmpty && index > 0) {
-                          _focusNodes[index - 1].requestFocus();
-                        }
-                        // Auto verify when all digits entered
-                        if (index == 5 && value.isNotEmpty) {
-                          _verifyOTP();
-                        }
-                      },
-                    ),
-                  );
-                }),
+              const SizedBox(height: 8),
+              Text(
+                widget.phoneNumber,
+                textAlign: TextAlign.center,
+                style: GoogleFonts.poppins(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: const Color(0xFFFFD700),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                '发送了验证码，请查收',
+                textAlign: TextAlign.center,
+                style: GoogleFonts.poppins(
+                  fontSize: 16,
+                  color: Colors.white70,
+                ),
+              ),
+              const SizedBox(height: 50),
+              PinCodeTextField(
+                appContext: context,
+                length: 6,
+                onChanged: (value) {
+                  _otpCode = value;
+                },
+                onCompleted: (value) {
+                  _otpCode = value;
+                  _verifyOTP();
+                },
+                autoFocus: true,
+                animationType: AnimationType.fade,
+                animationDuration: const Duration(milliseconds: 300),
+                controller: _pinController,
+                pinTheme: PinTheme(
+                  shape: PinCodeFieldShape.box,
+                  borderRadius: BorderRadius.circular(12),
+                  fieldHeight: 56,
+                  fieldWidth: 48,
+                  activeFillColor: Colors.white.withOpacity(0.1),
+                  inactiveFillColor: Colors.white.withOpacity(0.05),
+                  selectedFillColor: const Color(0xFFFFD700).withOpacity(0.2),
+                  activeColor: const Color(0xFFFFD700),
+                  inactiveColor: Colors.white.withOpacity(0.3),
+                  selectedColor: const Color(0xFFFFD700),
+                ),
+                textStyle: GoogleFonts.poppins(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+                backgroundColor: Colors.transparent,
+                enableActiveFill: true,
               ),
               const SizedBox(height: 40),
-              
-              // Verify Button
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '未收到验证码？',
+                    style: GoogleFonts.poppins(color: Colors.white70),
+                  ),
+                  TextButton(
+                    onPressed: _canResend
+                        ? () {
+                            setState(() {
+                              _resendSeconds = 60;
+                              _canResend = false;
+                            });
+                            _startResendTimer();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('验证码已重新发送'),
+                                backgroundColor: Color(0xFFFFD700),
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
+                          }
+                        : null,
+                    child: Text(
+                      _canResend
+                          ? '重新发送'
+                          : '${_resendSeconds}秒后重发',
+                      style: GoogleFonts.poppins(
+                        color: _canResend
+                            ? const Color(0xFFFFD700)
+                            : Colors.white38,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 40),
               ElevatedButton(
-                onPressed: _isVerifying ? null : _verifyOTP,
+                onPressed: _otpCode.length == 6 ? _verifyOTP : null,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFFFD700),
-                  foregroundColor: Colors.black,
+                  foregroundColor: const Color(0xFF1A1A2E),
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                   elevation: 0,
                 ),
-                child: _isVerifying
-                    ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
-                        ),
-                      )
-                    : Text(
-                        'Verify',
-                        style: GoogleFonts.poppins(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-              ),
-              const SizedBox(height: 24),
-              
-              // Resend OTP
-              TextButton(
-                onPressed: () {
-                  _showSnackBar('OTP resent to ${widget.phoneNumber}');
-                },
                 child: Text(
-                  'Resend OTP',
+                  '验证',
                   style: GoogleFonts.poppins(
-                    fontSize: 14,
-                    color: const Color(0xFFFFD700),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -216,5 +257,12 @@ class _OTPScreenState extends State<OTPScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _pinController.dispose();
+    cancel();
+    super.dispose();
   }
 }
