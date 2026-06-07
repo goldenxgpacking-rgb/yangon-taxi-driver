@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'order_center_screen.dart';
+import 'earnings_screen.dart';
+import '../services/earnings_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -173,8 +175,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: _buildStatCard(
                       icon: Icons.account_balance_wallet,
                       title: "Today's Earnings",
-                      value: 'Ks ${_todayEarnings.toStringAsFixed(0)}',
+                      value: 'Ks ${EarningsService.getTodayTotal().toStringAsFixed(0)}',
                       color: const Color(0xFFFFD700),
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const EarningsScreen(),
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -183,8 +191,49 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: _buildStatCard(
                       icon: Icons.check_circle,
                       title: 'Completed',
-                      value: '$_todayOrders orders',
+                      value: '${EarningsService.getTodayEarnings().length} orders',
                       color: Colors.green,
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const EarningsScreen(),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 20),
+
+              // Quick Access Row
+              Row(
+                children: [
+                  Expanded(
+                    child: _buildQuickButton(
+                      icon: Icons.local_taxi,
+                      label: 'Order Center',
+                      color: Colors.blue,
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const OrderCenterScreen(),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _buildQuickButton(
+                      icon: Icons.bar_chart,
+                      label: 'Earnings',
+                      color: const Color(0xFFFFD700),
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const EarningsScreen(),
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -266,13 +315,50 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Widget _buildQuickButton({
+    required IconData icon,
+    required String label,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 14),
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.15),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: color.withOpacity(0.3)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: color, size: 18),
+            const SizedBox(width: 8),
+            Text(
+              label,
+              style: GoogleFonts.poppins(
+                color: color,
+                fontWeight: FontWeight.w600,
+                fontSize: 13,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildStatCard({
     required IconData icon,
     required String title,
     required String value,
     required Color color,
-  })  {
-    return Container(
+    VoidCallback? onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white10,
@@ -299,6 +385,16 @@ class _HomeScreenState extends State<HomeScreen> {
               color: Colors.white,
             ),
           ),
+          if (onTap != null) ...[
+            const SizedBox(height: 4),
+            Text(
+              'Tap to view',
+              style: GoogleFonts.poppins(
+                fontSize: 10,
+                color: Colors.white24,
+              ),
+            ),
+          ],
         ],
       ),
     );
