@@ -12,13 +12,11 @@ class DriverProfileScreen extends StatefulWidget {
 class _DriverProfileScreenState extends State<DriverProfileScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
-  final _idCardController = TextEditingController();
   final _licenseController = TextEditingController();
 
   @override
   void dispose() {
     _nameController.dispose();
-    _idCardController.dispose();
     _licenseController.dispose();
     super.dispose();
   }
@@ -114,42 +112,6 @@ class _DriverProfileScreenState extends State<DriverProfileScreen> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return '请输入姓名';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 24),
-
-              // ID Card field
-              Text(
-                '身份证号',
-                style: GoogleFonts.poppins(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 8),
-              TextFormField(
-                controller: _idCardController,
-                style: GoogleFonts.poppins(color: Colors.white),
-                decoration: InputDecoration(
-                  hintText: '请输入身份证号码',
-                  hintStyle: GoogleFonts.poppins(color: Colors.grey[600]),
-                  filled: true,
-                  fillColor: Colors.white.withOpacity(0.1),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide.none,
-                  ),
-                  prefixIcon: const Icon(Icons.credit_card, color: Color(0xFFFFD700)),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return '请输入身份证号';
-                  }
-                  if (value.length != 18 && value.length != 15) {
-                    return '身份证号格式不正确';
                   }
                   return null;
                 },
