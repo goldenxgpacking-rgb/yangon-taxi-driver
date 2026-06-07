@@ -84,6 +84,12 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: const Icon(Icons.menu, color: Colors.white70),
+            onPressed: () => Scaffold.of(context).openDrawer(),
+          ),
+        ),
         title: Text(
           'Yangon Taxi Driver',
           style: GoogleFonts.poppins(
@@ -95,11 +101,17 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             icon: const Icon(Icons.notifications, color: Colors.white70),
             onPressed: () {
-              // TODO: Navigate to notifications
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Notifications coming soon'),
+                  behavior: SnackBarBehavior.floating,
+                ),
+              );
             },
           ),
         ],
       ),
+      drawer: _buildDrawer(context),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
@@ -311,6 +323,168 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         ),
+      ),
+      ),
+    );
+  }
+
+  Widget _buildDrawer(BuildContext context) {
+    return Drawer(
+      backgroundColor: const Color(0xFF2A2A3E),
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          DrawerHeader(
+            decoration: const BoxDecoration(
+              color: Color(0xFF1A1A2E),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const CircleAvatar(
+                  radius: 30,
+                  backgroundColor: Color(0xFFFFD700),
+                  child: Icon(Icons.person, color: Colors.black, size: 30),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  'Driver Name',
+                  style: GoogleFonts.poppins(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                Text(
+                  '09-123456789',
+                  style: GoogleFonts.poppins(
+                    color: Colors.white54,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          _buildDrawerItem(
+            context,
+            icon: Icons.home,
+            label: 'Home',
+            onTap: () => Navigator.pop(context),
+          ),
+          _buildDrawerItem(
+            context,
+            icon: Icons.list_alt,
+            label: 'Order Center',
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const OrderCenterScreen(),
+                ),
+              );
+            },
+          ),
+          _buildDrawerItem(
+            context,
+            icon: Icons.history,
+            label: 'Trip History',
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const TripHistoryScreen(),
+                ),
+              );
+            },
+          ),
+          _buildDrawerItem(
+            context,
+            icon: Icons.bar_chart,
+            label: 'Earnings',
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const EarningsScreen(),
+                ),
+              );
+            },
+          ),
+          const Divider(color: Colors.white10),
+          _buildDrawerItem(
+            context,
+            icon: Icons.person_outline,
+            label: 'Profile',
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const DriverProfileScreen(),
+                ),
+              );
+            },
+          ),
+          _buildDrawerItem(
+            context,
+            icon: Icons.settings,
+            label: 'Settings',
+            onTap: () {
+              Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Settings coming soon'),
+                  behavior: SnackBarBehavior.floating,
+                ),
+              );
+            },
+          ),
+          const Divider(color: Colors.white10),
+          _buildDrawerItem(
+            context,
+            icon: Icons.logout,
+            label: 'Logout',
+            color: Colors.redAccent,
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const LoginScreen(),
+                ),
+                (route) => false,
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDrawerItem(
+    BuildContext context, {
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+    Color? color,
+  }) {
+    return ListTile(
+      leading: Icon(icon, color: color ?? Colors.white70, size: 22),
+      title: Text(
+        label,
+        style: GoogleFonts.poppins(
+          color: color ?? Colors.white70,
+          fontSize: 14,
+        ),
+      ),
+      onTap: onTap,
+      minLeadingWidth: 0,
+      contentPadding: const EdgeInsets.symmetric(
+        horizontal: 24,
+        vertical: 4,
       ),
     );
   }
