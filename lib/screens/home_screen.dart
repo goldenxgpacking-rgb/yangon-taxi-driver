@@ -374,6 +374,15 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           _buildDrawerItem(
             context,
+            icon: Icons.account_balance_wallet,
+            label: 'Wallet',
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/wallet');
+            },
+          ),
+          _buildDrawerItem(
+            context,
             icon: Icons.settings,
             label: 'Settings',
             onTap: () {

@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 /// Wallet service - manages driver wallet balance and withdrawals
 class WalletService {
   // Mock wallet balance (in Kyat)
@@ -12,7 +10,7 @@ class WalletService {
   static double get balance => _balance;
 
   /// Get formatted balance
-  static String get formattedBalance => 'Ks ';
+  static String get formattedBalance => 'Ks ${_balance.toStringAsFixed(0)}';
 
   /// Check if withdrawal amount is valid
   static String? validateWithdrawal({
@@ -26,7 +24,7 @@ class WalletService {
 
     // Check sufficient balance
     if (amount > _balance) {
-      return 'Insufficient balance. Available: Ks ';
+      return 'Insufficient balance. Available: Ks ${_balance.toStringAsFixed(0)}';
     }
 
     // Check KBZ Pay phone number
@@ -55,7 +53,7 @@ class WalletService {
 
     // Record withdrawal
     final entry = WithdrawalEntry(
-      id: 'WD',
+      id: 'WD${DateTime.now().millisecondsSinceEpoch}',
       amount: amount,
       kbzPhone: kbzPhone,
       driverName: driverName,
@@ -68,7 +66,8 @@ class WalletService {
 
     return WithdrawalResult(
       success: true,
-      message: 'Withdrawal request submitted successfully. Amount: Ks  will be transferred to  within 24 hours.',
+      message:
+          'Withdrawal request submitted successfully. Amount: Ks ${amount.toStringAsFixed(0)} will be transferred to $kbzPhone within 24 hours.',
       withdrawal: entry,
     );
   }
@@ -86,10 +85,10 @@ class WalletService {
   /// Validate Myanmar phone number
   static bool _isValidMyanmarPhone(String phone) {
     // Remove spaces and dashes
-    final cleaned = phone.replaceAll(RegExp(r'[\\s\\-]'), '');
+    final cleaned = phone.replaceAll(RegExp(r'[\s\-]'), '');
 
     // Check if it starts with 09 and has 9-11 digits
-    return RegExp(r'^09\\d{7,9}$').hasMatch(cleaned);
+    return RegExp(r'^09\d{7,9}$').hasMatch(cleaned);
   }
 
   /// Get recent withdrawals (for display)
@@ -132,6 +131,19 @@ class WithdrawalEntry {
     required this.requestedAt,
     this.completedAt,
   });
+
+  String get formattedStatus {
+    switch (status) {
+      case WithdrawalStatus.pending:
+        return 'Pending';
+      case WithdrawalStatus.processing:
+        return 'Processing';
+      case WithdrawalStatus.completed:
+        return 'Completed';
+      case WithdrawalStatus.failed:
+        return 'Failed';
+    }
+  }
 }
 
 /// Withdrawal status enum

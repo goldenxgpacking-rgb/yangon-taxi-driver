@@ -10,6 +10,8 @@ import 'screens/earnings_screen.dart';
 import 'screens/trip_history_screen.dart';
 import 'screens/driver_profile_screen.dart';
 import 'screens/messages_screen.dart';
+import 'screens/wallet_screen.dart';
+import 'screens/withdraw_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -54,6 +56,7 @@ class YangonTaxiDriverApp extends StatelessWidget {
         '/trip-history': (context) => const TripHistoryScreen(),
         '/profile': (context) => const DriverProfileScreen(),
         '/messages': (context) => const MessagesScreen(),
+        '/wallet': (context) => const WalletScreen(),
       },
     );
   }

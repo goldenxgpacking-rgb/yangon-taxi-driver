@@ -1,99 +1,137 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../services/wallet_service.dart';
+import 'withdraw_screen.dart';
 
-class WalletScreen extends StatefulWidget {
+class WalletScreen extends StatelessWidget {
   const WalletScreen({super.key});
 
   @override
-  State<WalletScreen> createState() => _WalletScreenState();
-}
-
-class _WalletScreenState extends State<WalletScreen> {
-  final _kbzPhoneController = TextEditingController();
-  final _amountController = TextEditingController();
-
-  @override
-  void dispose() {
-    _kbzPhoneController.dispose();
-    _amountController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final balance = WalletService.formattedBalance;
+    final withdrawals = WalletService.getWithdrawalHistory();
+
     return Scaffold(
       backgroundColor: const Color(0xFF1A1A2E),
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: const Color(0xFF1A1A2E),
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white70),
+          icon: const Icon(Icons.arrow_back, color: Color(0xFFFFD700)),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          'My Wallet',
+          'Wallet',
           style: GoogleFonts.poppins(
             color: const Color(0xFFFFD700),
             fontWeight: FontWeight.bold,
+            fontSize: 20,
           ),
         ),
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          _buildBalanceCard(),
-          const SizedBox(height: 24),
-          _buildWithdrawButton(),
-          const SizedBox(height: 24),
-          _buildWithdrawalHistory(),
-        ],
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Balance Card
+            _buildBalanceCard(balance),
+            const SizedBox(height: 24),
+
+            // Withdraw Button
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const WithdrawScreen(),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFFFD700),
+                  foregroundColor: const Color(0xFF1A1A2E),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 0,
+                ),
+                child: Text(
+                  'Withdraw to KBZ Pay',
+                  style: GoogleFonts.poppins(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 32),
+
+            // Withdrawal History Title
+            Text(
+              'Withdrawal History',
+              style: GoogleFonts.poppins(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+              ),
+            ),
+            const SizedBox(height: 12),
+
+            // History List
+            withdrawals.isEmpty
+                ? _buildEmptyHistory()
+                : Column(
+                    children: withdrawals
+                        .map((w) => _buildWithdrawalItem(w))
+                        .toList(),
+                  ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildBalanceCard() {
+  Widget _buildBalanceCard(String balance) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
+        gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            const Color(0xFFFFD700).withOpacity(0.3),
-            const Color(0xFFFFD700).withOpacity(0.05),
-          ],
+          colors: [Color(0xFFFFD700), Color(0xFFFFA500)],
         ),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: const Color(0xFFFFD700).withOpacity(0.4),
-        ),
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Available Balance',
+            'Wallet Balance',
             style: GoogleFonts.poppins(
-              color: Colors.white54,
-              fontSize: 14,
+              color: const Color(0xFF1A1A2E).withOpacity(0.7),
+              fontSize: 13,
             ),
           ),
           const SizedBox(height: 8),
           Text(
-            WalletService.formattedBalance,
+            balance,
             style: GoogleFonts.poppins(
-              fontSize: 42,
+              color: const Color(0xFF1A1A2E),
               fontWeight: FontWeight.bold,
-              color: const Color(0xFFFFD700),
+              fontSize: 32,
             ),
           ),
           const SizedBox(height: 4),
           Text(
-            'Myanmar Kyat (Ks)',
+            'Available for withdrawal',
             style: GoogleFonts.poppins(
-              color: Colors.white38,
-              fontSize: 12,
+              color: const Color(0xFF1A1A2E).withOpacity(0.6),
+              fontSize: 11,
             ),
           ),
         ],
@@ -101,79 +139,67 @@ class _WalletScreenState extends State<WalletScreen> {
     );
   }
 
-  Widget _buildWithdrawButton() {
-    return ElevatedButton.icon(
-      onPressed: _showWithdrawDialog,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFFFFD700),
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(14),
-        ),
-      ),
-      icon: const Icon(Icons.payment, color: Colors.black),
-      label: Text(
-        'Withdraw to KBZ Pay',
-        style: GoogleFonts.poppins(
-          color: Colors.black,
-          fontWeight: FontWeight.w600,
-          fontSize: 16,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildWithdrawalHistory() {
-    final withdrawals = WalletService.getWithdrawalHistory();
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Withdrawal History',
-          style: GoogleFonts.poppins(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(height: 12),
-        if (withdrawals.isEmpty)
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Text(
-                'No withdrawal history yet',
-                style: GoogleFonts.poppins(
-                  color: Colors.white38,
-                  fontSize: 14,
-                ),
-              ),
-            ),
-          )
-        else
-          ...withdrawals.take(10).map((w) => _buildWithdrawalCard(w)),
-      ],
-    );
-  }
-
-  Widget _buildWithdrawalCard(WithdrawalEntry withdrawal) {
+  Widget _buildEmptyHistory() {
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(32),
+      alignment: Alignment.center,
+      child: Column(
+        children: [
+          Icon(
+            Icons.history,
+            size: 48,
+            color: Colors.white.withOpacity(0.2),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'No withdrawal history yet',
+            style: GoogleFonts.poppins(
+              color: Colors.white.withOpacity(0.4),
+              fontSize: 13,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildWithdrawalItem(WithdrawalEntry w) {
+    final isPending = w.status == WithdrawalStatus.pending ||
+        w.status == WithdrawalStatus.processing;
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: const Color(0xFF2A2A3E),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          // Icon
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: isPending
+                  ? Colors.orange.withOpacity(0.15)
+                  : Colors.green.withOpacity(0.15),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              isPending ? Icons.pending : Icons.check_circle,
+              color: isPending ? Colors.orange : Colors.green,
+              size: 20,
+            ),
+          ),
+          const SizedBox(width: 12),
+
+          // Content
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Ks ',
+                  'Ks ${w.amount.toStringAsFixed(0)}',
                   style: GoogleFonts.poppins(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
@@ -182,249 +208,47 @@ class _WalletScreenState extends State<WalletScreen> {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  withdrawal.kbzPhone,
+                  'To: ${w.kbzPhone}',
                   style: GoogleFonts.poppins(
-                    color: Colors.white54,
-                    fontSize: 12,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  '//',
-                  style: GoogleFonts.poppins(
-                    color: Colors.white38,
+                    color: Colors.white.withOpacity(0.5),
                     fontSize: 11,
                   ),
                 ),
               ],
             ),
           ),
-          _buildStatusBadge(withdrawal.status),
+
+          // Status
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            decoration: BoxDecoration(
+              color: _getStatusColor(w.status).withOpacity(0.15),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              w.formattedStatus,
+              style: GoogleFonts.poppins(
+                color: _getStatusColor(w.status),
+                fontSize: 11,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildStatusBadge(WithdrawalStatus status) {
-    Color color;
-    String text;
-
+  Color _getStatusColor(WithdrawalStatus status) {
     switch (status) {
       case WithdrawalStatus.pending:
-        color = Colors.orange;
-        text = 'Pending';
-        break;
+        return Colors.orange;
       case WithdrawalStatus.processing:
-        color = Colors.blue;
-        text = 'Processing';
-        break;
+        return Colors.blue;
       case WithdrawalStatus.completed:
-        color = Colors.green;
-        text = 'Completed';
-        break;
+        return Colors.green;
       case WithdrawalStatus.failed:
-        color = Colors.red;
-        text = 'Failed';
-        break;
+        return Colors.red;
     }
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, totalVertical: 4),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(
-        text,
-        style: GoogleFonts.poppins(
-          color: color,
-          fontSize: 12,
-          fontWeight: FontWeight.w500,
-        ),
-      ),
-    );
-  }
-
-  void _showWithdrawDialog() {
-    _kbzPhoneController.text = '';
-    _amountController.text = '';
-
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF2A2A3E),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        title: Text(
-          'Withdraw to KBZ Pay',
-          style: GoogleFonts.poppins(
-            color: const Color(0xFFFFD700),
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF1A1A2E),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Column(
-                  children: [
-                    Text(
-                      'Available Balance',
-                      style: GoogleFonts.poppins(
-                        color: Colors.white54,
-                        fontSize: 12,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      WalletService.formattedBalance,
-                      style: GoogleFonts.poppins(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              TextField(
-                controller: _kbzPhoneController,
-                style: GoogleFonts.poppins(color: Colors.white),
-                keyboardType: TextInputType.phone,
-                decoration: InputDecoration(
-                  labelText: 'KBZ Pay Phone Number',
-                  labelStyle: GoogleFonts.poppins(color: Colors.white54),
-                  hintText: '09XXXXXXXXX',
-                  prefixIcon: const Icon(Icons.phone, color: Color(0xFFFFD700)),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: _amountController,
-                style: GoogleFonts.poppins(color: Colors.white),
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  labelText: 'Amount (Ks)',
-                  labelStyle: GoogleFonts.poppins(color: Colors.white54),
-                  hintText: 'Minimum Ks 5,000',
-                  prefixIcon: const Icon(Icons.monetization_on, color: Color(0xFFFFD700)),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                'Minimum: Ks 5,000 | Fee: Ks 500',
-                style: GoogleFonts.poppins(
-                  color: Colors.white38,
-                  fontSize: 12,
-                ),
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(
-              'Cancel',
-              style: GoogleFonts.poppins(color: Colors.white54),
-            ),
-          ),
-          ElevatedButton(
-            onPressed: _processWithdrawal,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFFFD700),
-            ),
-            child: Text(
-              'Withdraw',
-              style: GoogleFonts.poppins(
-                color: Colors.black,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Future<void> _processWithdrawal() async {
-    final phone = _kbzPhoneController.text.trim();
-    final amountText = _amountController.text.trim();
-
-    if (phone.isEmpty || amountText.isEmpty) {
-      _showMessage('Please fill in all fields', Colors.red);
-      return;
-    }
-
-    final amount = double.tryParse(amountText);
-    if (amount == null || amount <= 0) {
-      _showMessage('Please enter a valid amount', Colors.red);
-      return;
-    }
-
-    final error = WalletService.validateWithdrawal(
-      amount: amount,
-      kbzPhone: phone,
-    );
-
-    if (error != null) {
-      _showMessage(error, Colors.red);
-      return;
-    }
-
-    Navigator.pop(context);
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => const Center(
-        child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFFFD700)),
-        ),
-      ),
-    );
-
-    final result = await WalletService.withdrawToKBZPay(
-      amount: amount,
-      kbzPhone: phone,
-      driverName: 'Driver',
-    );
-
-    if (!mounted) return;
-    Navigator.pop(context);
-
-    if (result.success) {
-      _showMessage(result.message, Colors.green);
-      setState(() {});
-    } else {
-      _showMessage(result.message, Colors.red);
-    }
-  }
-
-  void _showMessage(String message, Color color) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          message,
-          style: GoogleFonts.poppins(),
-        ),
-        backgroundColor: color,
-        duration: const Duration(seconds: 3),
-      ),
-    );
   }
 }
