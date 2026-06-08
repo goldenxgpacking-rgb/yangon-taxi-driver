@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/order.dart';
 import '../services/order_service.dart';
-import 'ride_accepted_screen.dart';
+import 'ride_in_progress_screen.dart';
 
 class OrderCenterScreen extends StatefulWidget {
   const OrderCenterScreen({super.key});
@@ -60,11 +60,17 @@ class _OrderCenterScreenState extends State<OrderCenterScreen> {
         ),
       );
 
-      // Navigate to ride screen
+      // Navigate to ride in progress screen
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => RideAcceptedScreen(order: accepted),
+          builder: (context) => RideInProgressScreen(
+            passengerName: accepted.passengerName,
+            pickupAddress: accepted.pickupAddress,
+            destinationAddress: accepted.destinationAddress,
+            distance: accepted.distance,
+            duration: accepted.estimatedDuration,
+          ),
         ),
       ).then((_) => _loadOrders());
     }
