@@ -49,31 +49,53 @@ class _RideInProgressScreenState extends State<RideInProgressScreen> {
     _startLocationTracking();
   }
 
-  void _startLocationTracking() {
+  void _startLocationTracking() async {
     final locationService = LocationService();
-    locationService.simulateRoute(
-      pickupLat: _pickupPos.latitude,
-      pickupLng: _pickupPos.longitude,
-      destLat: _destPos.latitude,
-      destLng: _destPos.longitude,
-    );
-    _locationSub = locationService.locationStream.listen((update) {
-      if (mounted) {
-        setState(() {
-          _driverPosition = LatLng(update.lat, update.lng);
-          _heading = update.heading;
-          _currentSpeed = update.speed;
-          _remainingKm = LocationService.calculateDistance(
-            update.lat,
-            update.lng,
-            _destPos.latitude,
-            _destPos.longitude,
-          );
-          _remainingMin =
-              LocationService.estimateTravelTime(_remainingKm);
-        });
-      }
-    });
+
+    if (locationService.useRealGps) {
+      // Real GPS - listen for updates, start from current position
+      await locationService.startTracking();
+      _locationSub = locationService.locationStream.listen((update) {
+        if (mounted) {
+          setState(() {
+            _driverPosition = LatLng(update.lat, update.lng);
+            _heading = update.heading;
+            _currentSpeed = update.speed;
+            _remainingKm = LocationService.calculateDistance(
+              update.lat,
+              update.lng,
+              _destPos.latitude,
+              _destPos.longitude,
+            );
+            _remainingMin = LocationService.estimateTravelTime(_remainingKm);
+          });
+        }
+      });
+    } else {
+      // Mock mode - simulate route
+      locationService.simulateRoute(
+        pickupLat: _pickupPos.latitude,
+        pickupLng: _pickupPos.longitude,
+        destLat: _destPos.latitude,
+        destLng: _destPos.longitude,
+      );
+      _locationSub = locationService.locationStream.listen((update) {
+        if (mounted) {
+          setState(() {
+            _driverPosition = LatLng(update.lat, update.lng);
+            _heading = update.heading;
+            _currentSpeed = update.speed;
+            _remainingKm = LocationService.calculateDistance(
+              update.lat,
+              update.lng,
+              _destPos.latitude,
+              _destPos.longitude,
+            );
+            _remainingMin = LocationService.estimateTravelTime(_remainingKm);
+          });
+        }
+      });
+    }
   }
 
   @override

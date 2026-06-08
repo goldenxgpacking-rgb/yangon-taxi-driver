@@ -1,6 +1,8 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
+import '../services/location_service.dart';
 import 'login_screen.dart';
 import 'order_center_screen.dart';
 import 'earnings_screen.dart';
@@ -41,6 +43,20 @@ class _HomeScreenState extends State<HomeScreen> {
       status = await Permission.location.request();
     }
 
+    if (status.isGranted) {
+      // Try real GPS via MethodChannel
+      final locationService = LocationService();
+      final hasGps = await locationService.initialize();
+      if (hasGps) {
+        setState(() {
+          _currentAddress = 'GPS Active (${locationService.currentLat.toStringAsFixed(4)}, ${locationService.currentLng.toStringAsFixed(4)})';
+          _isLoadingLocation = false;
+        });
+        return;
+      }
+    }
+
+    // Fallback: use default Yangon location
     await Future.delayed(const Duration(milliseconds: 500));
     setState(() {
       _currentAddress = 'Yangon, Myanmar (16.8661, 96.1951)';
