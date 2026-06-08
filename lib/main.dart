@@ -22,6 +22,13 @@ void main() async {
   runApp(const YangonTaxiDriverApp());
 }
 
+/// Handle notification taps when app is in foreground
+@pragma('vm:entry-point')
+Future<void> onActionReceivedMethod(ReceivedAction receivedAction) async {
+  // Navigate based on notification payload
+  // This is a static callback for awesome_notifications
+}
+
 class YangonTaxiDriverApp extends StatelessWidget {
   const YangonTaxiDriverApp({super.key});
 

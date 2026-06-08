@@ -48,8 +48,8 @@ class NotificationService {
       NotificationContent(
         id: orderId.hashCode & 0x7FFFFFFF,
         channelKey: 'new_order',
-        title: '🚕 New Order Received!',
-        body: '$passengerName · $pickupAddress',
+        title: 'New Order Received!',
+        body: '$passengerName - $pickupAddress',
         notificationLayout: NotificationLayout.Default,
         wakeUpScreen: true,
         category: NotificationCategory.Reminder,
@@ -73,15 +73,34 @@ class NotificationService {
     );
   }
 
-  /// Listen for notification tap events
-  static void setNotificationTapListener(
-    Function(ReceivedNotification) onTap,
-  ) {
-    AwesomeNotifications().setListeners(
-      onActionReceivedMethod: (receivedNotification) {
-        onTap(receivedNotification);
-        return Future<void>.value();
-      },
+  /// Show a simple notification
+  static Future<void> showNotification({
+    required String title,
+    required String body,
+    String channelKey = 'order_status',
+  }) async {
+    await AwesomeNotifications().createNotification(
+      NotificationContent(
+        id: title.hashCode & 0x7FFFFFFF,
+        channelKey: channelKey,
+        title: title,
+        body: body,
+        notificationLayout: NotificationLayout.Default,
+      ),
     );
+  }
+
+  /// Set up action stream listener for notification taps
+  static Stream<ReceivedAction> get actionStream =>
+      AwesomeNotifications().actionStream;
+
+  /// Cancel a specific notification
+  static Future<void> cancelNotification(int id) async {
+    await AwesomeNotifications().cancel(id);
+  }
+
+  /// Cancel all notifications
+  static Future<void> cancelAllNotifications() async {
+    await AwesomeNotifications().cancelAll();
   }
 }
