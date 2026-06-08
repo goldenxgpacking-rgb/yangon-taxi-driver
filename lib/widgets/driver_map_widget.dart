@@ -153,8 +153,17 @@ class _DriverMapWidgetState extends State<DriverMapWidget> {
             ),
 
           // Map attribution (required by OSM)
-          SimpleAttribution(
-            source: Text('OpenStreetMap', style: GoogleFonts.poppins(fontSize: 8, color: Colors.white54)),
+          Positioned(
+            bottom: 2,
+            right: 2,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+              color: Colors.white54,
+              child: Text(
+                '© OpenStreetMap',
+                style: GoogleFonts.poppins(fontSize: 8, color: Colors.black54),
+              ),
+            ),
           ),
         ],
       ),

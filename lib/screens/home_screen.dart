@@ -4,6 +4,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'login_screen.dart';
 import 'order_center_screen.dart';
 import 'earnings_screen.dart';
+import 'ride_in_progress_screen.dart';
 import 'trip_history_screen.dart';
 import 'driver_profile_screen.dart';
 import '../services/earnings_service.dart';
