@@ -245,7 +245,7 @@ class _EarningsList extends StatelessWidget {
     );
   }
 
-  Widget _buildTripCard(EarningsService.EarningsEntry entry) {
+  Widget _buildTripCard(EarningsEntry entry) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),

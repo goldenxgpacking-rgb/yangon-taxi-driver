@@ -4,6 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
 import 'vehicle_info_screen.dart';
+import 'trip_history_screen.dart';
+import 'earnings_screen.dart';
+import 'login_screen.dart';
 
 class DriverProfileScreen extends StatefulWidget {
   const DriverProfileScreen({super.key});
