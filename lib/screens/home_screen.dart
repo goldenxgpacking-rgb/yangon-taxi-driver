@@ -7,6 +7,8 @@ import 'earnings_screen.dart';
 import 'trip_history_screen.dart';
 import 'driver_profile_screen.dart';
 import '../services/earnings_service.dart';
+import '../widgets/driver_map_widget.dart';
+import 'package:latlong2/latlong.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -248,6 +250,24 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
               const Spacer(),
+              // Mini map preview
+              MapPreviewCard(
+                center: const LatLng(16.8661, 96.1951),
+                zoom: 13.0,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const RideInProgressScreen(
+                        passengerName: 'Demo',
+                        pickupAddress: 'Sule Square, Yangon',
+                        destinationAddress: 'Yangon Airport',
+                      ),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 12),
               Text(
                 'Drive safely. Stay online to receive orders.',
                 style: GoogleFonts.poppins(

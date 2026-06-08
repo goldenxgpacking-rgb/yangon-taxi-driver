@@ -28,10 +28,15 @@ dependencies:
   provider: ^6.1.1
   shared_preferences: ^2.3.2
 
+  # 地图
+  flutter_map: ^7.0.2
+  latlong2: ^0.9.1
+
   # 网络 & 工具
   http: ^1.1.0
   url_launcher: ^6.3.1
   package_info_plus: ^8.1.0
+  geolocator: ^13.0.2
 
   # 推送通知
   awesome_notifications: ^0.10.0
