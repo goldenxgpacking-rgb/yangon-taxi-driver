@@ -83,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0,
         leading: Builder(
           builder: (context) => IconButton(
-            icon: const Icon(Icons.menu, color: Colors.white70),
+            icon: const Icon(Icons.menu, color: Color(0xFFFFD700)),
             onPressed: () => Scaffold.of(context).openDrawer(),
           ),
         ),
@@ -96,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.notifications, color: Colors.white70),
+            icon: const Icon(Icons.notifications, color: Color(0xFFFFD700)),
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
