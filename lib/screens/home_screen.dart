@@ -387,12 +387,7 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Settings',
             onTap: () {
               Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Settings coming soon'),
-                  behavior: SnackBarBehavior.floating,
-                ),
-              );
+              Navigator.pushNamed(context, '/settings');
             },
           ),
           const Divider(color: Colors.white10),

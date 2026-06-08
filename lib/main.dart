@@ -12,6 +12,7 @@ import 'screens/driver_profile_screen.dart';
 import 'screens/messages_screen.dart';
 import 'screens/wallet_screen.dart';
 import 'screens/withdraw_screen.dart';
+import 'screens/settings_screen.dart';
 import 'services/notification_service.dart';
 
 void main() async {
@@ -60,6 +61,7 @@ class YangonTaxiDriverApp extends StatelessWidget {
         '/profile': (context) => const DriverProfileScreen(),
         '/messages': (context) => const MessagesScreen(),
         '/wallet': (context) => const WalletScreen(),
+        '/settings': (context) => const SettingsScreen(),
       },
     );
   }
