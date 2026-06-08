@@ -69,7 +69,7 @@ class _OrderCenterScreenState extends State<OrderCenterScreen> {
             pickupAddress: accepted.pickupAddress,
             destinationAddress: accepted.destinationAddress,
             distance: accepted.distance,
-            duration: accepted.estimatedDuration,
+            duration: accepted.estimatedTime,
           ),
         ),
       ).then((_) => _loadOrders());

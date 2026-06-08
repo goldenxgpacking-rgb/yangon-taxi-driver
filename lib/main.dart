@@ -37,7 +37,7 @@ class YangonTaxiDriverApp extends StatelessWidget {
       ),
       home: const LoginScreen(),
       routes: {
-        '/otp': (context) => const OTPScreen(),
+        '/otp': (context) => const OTPScreen(phoneNumber: '+95 9123456789'),
         '/home': (context) => const HomeScreen(),
         '/order-center': (context) => const OrderCenterScreen(),
         '/ride-in-progress': (context) => const RideInProgressScreen(
