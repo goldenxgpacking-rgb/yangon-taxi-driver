@@ -14,20 +14,12 @@ import 'screens/wallet_screen.dart';
 import 'screens/withdraw_screen.dart';
 import 'screens/settings_screen.dart';
 import 'services/notification_service.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await NotificationService.initialize();
   await NotificationService.requestPermissions();
   runApp(const YangonTaxiDriverApp());
-}
-
-/// Handle notification taps when app is in foreground
-@pragma('vm:entry-point')
-Future<void> onActionReceivedMethod(ReceivedAction receivedAction) async {
-  // Navigate based on notification payload
-  // This is a static callback for awesome_notifications
 }
 
 class YangonTaxiDriverApp extends StatelessWidget {

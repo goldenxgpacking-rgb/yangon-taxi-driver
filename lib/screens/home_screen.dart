@@ -258,7 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const RideInProgressScreen(
+                      builder: (context) => RideInProgressScreen(
                         passengerName: 'Demo',
                         pickupAddress: 'Sule Square, Yangon',
                         destinationAddress: 'Yangon Airport',
