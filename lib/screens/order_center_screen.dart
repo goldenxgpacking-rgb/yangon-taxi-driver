@@ -23,7 +23,8 @@ class _OrderCenterScreenState extends State<OrderCenterScreen> {
     _loadOrders();
   }
 
-  Future<void> _loadOrders() async {
+  /// Load orders and show notification (must be called after first frame)
+  void _loadOrders() async {
     setState(() {
       _isLoading = true;
     });

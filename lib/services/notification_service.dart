@@ -75,11 +75,12 @@ class NotificationService {
 
   /// Listen for notification tap events
   static void setNotificationTapListener(
-    void Function(ReceivedNotification notification) onTap,
+    Function(ReceivedNotification) onTap,
   ) {
     AwesomeNotifications().setListeners(
-      onActionReceivedMethod: (receivedNotification) async {
-        onTap(receivedNotification as ReceivedNotification);
+      onActionReceivedMethod: (receivedNotification) {
+        onTap(receivedNotification);
+        return Future<void>.value();
       },
     );
   }
