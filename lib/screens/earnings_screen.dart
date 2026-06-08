@@ -78,7 +78,7 @@ class _EarningsScreenState extends State<EarningsScreen>
 }
 
 class _EarningsList extends StatelessWidget {
-  final List<EarningsService.EarningsEntry> earnings;
+  final List<EarningsEntry> earnings;
   final String periodLabel;
 
   const _EarningsList({
