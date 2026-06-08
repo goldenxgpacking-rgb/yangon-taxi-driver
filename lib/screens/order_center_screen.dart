@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../models/order.dart';
 import '../services/order_service.dart';
 import 'ride_in_progress_screen.dart';
+import '../services/notification_service.dart';
 
 class OrderCenterScreen extends StatefulWidget {
   const OrderCenterScreen({super.key});
@@ -34,6 +35,15 @@ class _OrderCenterScreenState extends State<OrderCenterScreen> {
     final pendingOrders = OrderService.getPendingOrders();
     final activeOrder = OrderService.getCurrentActiveOrder();
 
+    // Show notification for new orders (simulate push)
+    if (pendingOrders.isNotEmpty && mounted) {
+      await NotificationService.showNewOrderNotification(
+        orderId: pendingOrders.first.id,
+        passengerName: pendingOrders.first.passengerName,
+        pickupAddress: pendingOrders.first.pickupAddress,
+      );
+    }
+
     setState(() {
       _orders = pendingOrders;
       _acceptedOrder = activeOrder;
@@ -44,6 +54,12 @@ class _OrderCenterScreenState extends State<OrderCenterScreen> {
   void _acceptOrder(RideOrder order) {
     final accepted = OrderService.acceptOrder(order.id);
     if (accepted != null) {
+      // Show system notification
+      NotificationService.showOrderAcceptedNotification(
+        orderId: accepted.id,
+        passengerName: accepted.passengerName,
+      );
+
       setState(() {
         _acceptedOrder = accepted;
         _orders = OrderService.getPendingOrders();

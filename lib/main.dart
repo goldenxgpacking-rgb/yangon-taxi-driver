@@ -12,9 +12,12 @@ import 'screens/driver_profile_screen.dart';
 import 'screens/messages_screen.dart';
 import 'screens/wallet_screen.dart';
 import 'screens/withdraw_screen.dart';
+import 'services/notification_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService.initialize();
+  await NotificationService.requestPermissions();
   runApp(const YangonTaxiDriverApp());
 }
 
