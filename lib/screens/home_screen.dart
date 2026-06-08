@@ -365,6 +365,15 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           _buildDrawerItem(
             context,
+            icon: Icons.chat_bubble,
+            label: 'Messages',
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/messages');
+            },
+          ),
+          _buildDrawerItem(
+            context,
             icon: Icons.settings,
             label: 'Settings',
             onTap: () {
