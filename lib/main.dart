@@ -14,6 +14,7 @@ import 'screens/wallet_screen.dart';
 import 'screens/withdraw_screen.dart';
 import 'screens/settings_screen.dart';
 import 'services/notification_service.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
