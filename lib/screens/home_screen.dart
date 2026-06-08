@@ -4,6 +4,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'login_screen.dart';
 import 'order_center_screen.dart';
 import 'earnings_screen.dart';
+import 'trip_history_screen.dart';
+import 'driver_profile_screen.dart';
 import '../services/earnings_service.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -31,14 +33,11 @@ class _HomeScreenState extends State<HomeScreen> {
       _isLoadingLocation = true;
     });
 
-    // Request permission
     var status = await Permission.location.status;
     if (!status.isGranted) {
       status = await Permission.location.request();
     }
 
-    // TODO: Replace with real geolocation after backend integration
-    // Currently using mock location (Yangon City Hall)
     await Future.delayed(const Duration(milliseconds: 500));
     setState(() {
       _currentAddress = 'Yangon, Myanmar (16.8661, 96.1951)';
@@ -48,19 +47,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _toggleOnlineStatus() async {
     if (!_isOnline) {
-      // Going online → navigate to order center
       final result = await Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => const OrderCenterScreen(),
         ),
       );
-      // When coming back from order center, stay online
       setState(() {
         _isOnline = true;
       });
     } else {
-      // Going offline
       setState(() {
         _isOnline = false;
       });
@@ -119,7 +115,6 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Online/Offline Toggle Button
               GestureDetector(
                 onTap: _toggleOnlineStatus,
                 child: Container(
@@ -140,9 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
-                      color: _isOnline
-                          ? Colors.green
-                          : Colors.grey[700]!,
+                      color: _isOnline ? Colors.green : Colors.grey[700]!,
                       width: 2,
                     ),
                   ),
@@ -165,9 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        _isOnline
-                            ? 'You are receiving orders'
-                            : 'Tap to go online',
+                        _isOnline ? 'You are receiving orders' : 'Tap to go online',
                         style: GoogleFonts.poppins(
                           fontSize: 14,
                           color: Colors.white60,
@@ -177,142 +168,86 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-
               const SizedBox(height: 32),
-
-              // Today's Stats
               Row(
                 children: [
-                  // Earnings Card
                   Expanded(
                     child: _buildStatCard(
                       icon: Icons.account_balance_wallet,
                       title: "Today's Earnings",
-                      value: 'Ks ${EarningsService.getTodayTotal().toStringAsFixed(0)}',
+                      value: 'Ks ${_todayEarnings.toStringAsFixed(0)}',
                       color: const Color(0xFFFFD700),
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const EarningsScreen(),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  // Orders Card
-                  Expanded(
-                    child: _buildStatCard(
-                      icon: Icons.check_circle,
-                      title: 'Completed',
-                      value: '${EarningsService.getTodayEarnings().length} orders',
-                      color: Colors.green,
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const EarningsScreen(),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 20),
-
-              // Quick Access Row
-              Row(
-                children: [
-                  Expanded(
-                    child: _buildQuickButton(
-                      icon: Icons.local_taxi,
-                      label: 'Order Center',
-                      color: Colors.blue,
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const OrderCenterScreen(),
-                        ),
-                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const EarningsScreen(),
+                          ),
+                        );
+                      },
                     ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
-                    child: _buildQuickButton(
-                      icon: Icons.bar_chart,
-                      label: 'Earnings',
-                      color: const Color(0xFFFFD700),
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const EarningsScreen(),
-                        ),
-                      ),
+                    child: _buildStatCard(
+                      icon: Icons.list_alt,
+                      title: 'Orders',
+                      value: '$_todayOrders',
+                      color: Colors.blue,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const OrderCenterScreen(),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ],
               ),
-
               const SizedBox(height: 32),
-
-              // Current Location
               Text(
-                'Current Location',
+                'Quick Actions',
                 style: GoogleFonts.poppins(
+                  color: Colors.white,
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: Colors.white,
                 ),
               ),
               const SizedBox(height: 12),
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white10,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.location_on,
-                      color: const Color(0xFFFFD700),
-                      size: 20,
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: _isLoadingLocation
-                          ? const SizedBox(
-                              height: 16,
-                              width: 16,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  Color(0xFFFFD700),
-                                ),
-                              ),
-                            )
-                          : Text(
-                              _currentAddress,
-                              style: GoogleFonts.poppins(
-                                fontSize: 14,
-                                color: Colors.white70,
-                              ),
-                            ),
-                    ),
-                    IconButton(
-                      icon: const Icon(
-                        Icons.refresh,
-                        color: Colors.white70,
-                        size: 20,
-                      ),
-                      onPressed: _getCurrentLocation,
-                    ),
-                  ],
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _buildQuickButton(
+                    icon: Icons.list_alt,
+                    label: 'Order Center',
+                    color: const Color(0xFFFFD700),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const OrderCenterScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  _buildQuickButton(
+                    icon: Icons.bar_chart,
+                    label: 'Earnings',
+                    color: Colors.blue,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const EarningsScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ),
-
               const Spacer(),
-
-              // Bottom Note
               Text(
                 'Drive safely. Stay online to receive orders.',
                 style: GoogleFonts.poppins(
@@ -324,7 +259,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         ),
-      ),
       ),
     );
   }
@@ -534,43 +468,44 @@ class _HomeScreenState extends State<HomeScreen> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white10,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(icon, color: color, size: 24),
-          const SizedBox(height: 12),
-          Text(
-            title,
-            style: GoogleFonts.poppins(
-              fontSize: 12,
-              color: Colors.white60,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            value,
-            style: GoogleFonts.poppins(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-          if (onTap != null) ...[
-            const SizedBox(height: 4),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white10,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(icon, color: color, size: 24),
+            const SizedBox(height: 12),
             Text(
-              'Tap to view',
+              title,
               style: GoogleFonts.poppins(
-                fontSize: 10,
-                color: Colors.white24,
+                fontSize: 12,
+                color: Colors.white60,
               ),
             ),
+            const SizedBox(height: 4),
+            Text(
+              value,
+              style: GoogleFonts.poppins(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            if (onTap != null) ...[
+              const SizedBox(height: 4),
+              Text(
+                'Tap to view',
+                style: GoogleFonts.poppins(
+                  fontSize: 10,
+                  color: Colors.white24,
+                ),
+              ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
