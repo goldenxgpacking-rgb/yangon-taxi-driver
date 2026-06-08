@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/services.dart';
 import '../services/wallet_service.dart';
@@ -106,7 +106,7 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
               message,
               textAlign: TextAlign.center,
               style: GoogleFonts.poppins(
-                color: Colors.white.withOpacity(0.6),
+                color: Colors.white.withValues(alpha: 0.6),
                 fontSize: 12,
               ),
             ),
@@ -177,7 +177,7 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                     Text(
                       'Available Balance',
                       style: GoogleFonts.poppins(
-                        color: Colors.white.withOpacity(0.6),
+                        color: Colors.white.withValues(alpha: 0.6),
                         fontSize: 13,
                       ),
                     ),
@@ -212,7 +212,7 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                 decoration: InputDecoration(
                   hintText: 'e.g. 10000',
                   hintStyle: GoogleFonts.poppins(
-                    color: Colors.white.withOpacity(0.3),
+                    color: Colors.white.withValues(alpha: 0.3),
                     fontSize: 20,
                   ),
                   prefixText: 'Ks ',
@@ -235,7 +235,7 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
               Text(
                 'Minimum withdrawal: Ks 5,000',
                 style: GoogleFonts.poppins(
-                  color: Colors.white.withOpacity(0.3),
+                  color: Colors.white.withValues(alpha: 0.3),
                   fontSize: 11,
                 ),
               ),
@@ -258,7 +258,7 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                 decoration: InputDecoration(
                   hintText: 'e.g. 09XXXXXXXXX',
                   hintStyle: GoogleFonts.poppins(
-                    color: Colors.white.withOpacity(0.3),
+                    color: Colors.white.withValues(alpha: 0.3),
                     fontSize: 15,
                   ),
                   filled: true,
@@ -275,7 +275,7 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
               Text(
                 'Make sure the phone number is registered with KBZ Pay',
                 style: GoogleFonts.poppins(
-                  color: Colors.white.withOpacity(0.3),
+                  color: Colors.white.withValues(alpha: 0.3),
                   fontSize: 11,
                 ),
               ),
@@ -286,7 +286,7 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                 Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: Colors.red.withOpacity(0.1),
+                    color: Colors.red.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
@@ -319,7 +319,7 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                     backgroundColor: const Color(0xFFFFD700),
                     foregroundColor: const Color(0xFF1A1A2E),
                     disabledBackgroundColor:
-                        const Color(0xFFFFD700).withOpacity(0.3),
+                        const Color(0xFFFFD700).withValues(alpha: 0.3),
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),

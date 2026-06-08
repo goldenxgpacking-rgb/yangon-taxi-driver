@@ -78,7 +78,7 @@ class _DriverMapWidgetState extends State<DriverMapWidget> {
                     widget.pickupPosition!,
                     widget.destinationPosition!,
                   ],
-                  color: const Color(0xFFFFD700).withOpacity(0.8),
+                  color: const Color(0xFFFFD700).withValues(alpha: 0.8),
                   strokeWidth: 4.0,
                   pattern: const StrokePattern.dotted(),
                 ),
@@ -135,7 +135,7 @@ class _DriverMapWidgetState extends State<DriverMapWidget> {
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.4),
+                            color: Colors.black.withValues(alpha: 0.4),
                             blurRadius: 6,
                             offset: const Offset(0, 3),
                           ),

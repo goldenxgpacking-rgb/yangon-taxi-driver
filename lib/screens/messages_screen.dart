@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/message.dart';
 import '../services/message_service.dart';
@@ -47,13 +47,13 @@ class MessagesScreen extends StatelessWidget {
           Icon(
             Icons.chat_bubble_outline,
             size: 64,
-            color: Colors.white.withOpacity(0.3),
+            color: Colors.white.withValues(alpha: 0.3),
           ),
           const SizedBox(height: 16),
           Text(
             'No messages yet',
             style: GoogleFonts.poppins(
-              color: Colors.white.withOpacity(0.5),
+              color: Colors.white.withValues(alpha: 0.5),
               fontSize: 16,
             ),
           ),
@@ -113,7 +113,7 @@ class MessagesScreen extends StatelessWidget {
                       Text(
                         _formatTime(conv.lastMessageTime),
                         style: GoogleFonts.poppins(
-                          color: Colors.white.withOpacity(0.5),
+                          color: Colors.white.withValues(alpha: 0.5),
                           fontSize: 12,
                         ),
                       ),
@@ -126,7 +126,7 @@ class MessagesScreen extends StatelessWidget {
                         child: Text(
                           conv.lastMessage,
                           style: GoogleFonts.poppins(
-                            color: Colors.white.withOpacity(0.6),
+                            color: Colors.white.withValues(alpha: 0.6),
                             fontSize: 13,
                           ),
                           maxLines: 1,

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'document_upload_screen.dart';
 
@@ -114,7 +114,7 @@ class _VehicleInfoScreenState extends State<VehicleInfoScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.1),
+                  color: Colors.white.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: DropdownButtonHideUnderline(
@@ -164,7 +164,7 @@ class _VehicleInfoScreenState extends State<VehicleInfoScreen> {
                   hintText: '例如：Toyota Camry',
                   hintStyle: GoogleFonts.poppins(color: Colors.grey[600]),
                   filled: true,
-                  fillColor: Colors.white.withOpacity(0.1),
+                  fillColor: Colors.white.withValues(alpha: 0.1),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
@@ -197,7 +197,7 @@ class _VehicleInfoScreenState extends State<VehicleInfoScreen> {
                   hintText: '请输入车牌号',
                   hintStyle: GoogleFonts.poppins(color: Colors.grey[600]),
                   filled: true,
-                  fillColor: Colors.white.withOpacity(0.1),
+                  fillColor: Colors.white.withValues(alpha: 0.1),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
@@ -230,7 +230,7 @@ class _VehicleInfoScreenState extends State<VehicleInfoScreen> {
                   hintText: '例如：白色',
                   hintStyle: GoogleFonts.poppins(color: Colors.grey[600]),
                   filled: true,
-                  fillColor: Colors.white.withOpacity(0.1),
+                  fillColor: Colors.white.withValues(alpha: 0.1),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,

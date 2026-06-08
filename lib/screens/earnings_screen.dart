@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../services/earnings_service.dart';
 import '../services/wallet_service.dart';
@@ -120,13 +120,13 @@ class _EarningsList extends StatelessWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                const Color(0xFFFFD700).withOpacity(0.3),
-                const Color(0xFFFFD700).withOpacity(0.05),
+                const Color(0xFFFFD700).withValues(alpha: 0.3),
+                const Color(0xFFFFD700).withValues(alpha: 0.05),
               ],
             ),
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: const Color(0xFFFFD700).withOpacity(0.4),
+              color: const Color(0xFFFFD700).withValues(alpha: 0.4),
             ),
           ),
           child: Column(
@@ -274,7 +274,7 @@ class _EarningsList extends StatelessWidget {
             width: 44,
             height: 44,
             decoration: BoxDecoration(
-              color: _getVehicleColor(entry.vehicleType).withOpacity(0.2),
+              color: _getVehicleColor(entry.vehicleType).withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(

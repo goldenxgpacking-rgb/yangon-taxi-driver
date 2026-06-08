@@ -1,4 +1,4 @@
-import 'dart:io';
+﻿import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -481,7 +481,7 @@ class _DriverProfileScreenState extends State<DriverProfileScreen> {
         labelStyle: GoogleFonts.poppins(color: Colors.white54, fontSize: 13),
         prefixIcon: Icon(icon, color: const Color(0xFFFFD700), size: 20),
         filled: true,
-        fillColor: Colors.white.withOpacity(0.08),
+        fillColor: Colors.white.withValues(alpha: 0.08),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,

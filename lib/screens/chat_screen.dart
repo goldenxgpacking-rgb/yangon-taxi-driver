@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/message.dart';
 import '../services/message_service.dart';
@@ -89,7 +89,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   Text(
                     widget.conversation.passengerPhone,
                     style: GoogleFonts.poppins(
-                      color: Colors.white.withOpacity(0.5),
+                      color: Colors.white.withValues(alpha: 0.5),
                       fontSize: 11,
                     ),
                   ),
@@ -113,7 +113,7 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ),
           // Divider
-          Divider(height: 1, color: Colors.white.withOpacity(0.1)),
+          Divider(height: 1, color: Colors.white.withValues(alpha: 0.1)),
           // Input area
           _buildMessageInput(),
         ],
@@ -154,8 +154,8 @@ class _ChatScreenState extends State<ChatScreen> {
               _formatTime(msg.timestamp),
               style: GoogleFonts.poppins(
                 color: msg.isMe
-                    ? const Color(0xFF1A1A2E).withOpacity(0.6)
-                    : Colors.white.withOpacity(0.4),
+                    ? const Color(0xFF1A1A2E).withValues(alpha: 0.6)
+                    : Colors.white.withValues(alpha: 0.4),
                 fontSize: 10,
               ),
             ),
@@ -179,7 +179,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 decoration: InputDecoration(
                   hintText: 'Type a message...',
                   hintStyle: GoogleFonts.poppins(
-                    color: Colors.white.withOpacity(0.4),
+                    color: Colors.white.withValues(alpha: 0.4),
                     fontSize: 14,
                   ),
                   border: OutlineInputBorder(

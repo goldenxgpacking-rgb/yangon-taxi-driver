@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../models/order.dart';
@@ -259,7 +259,7 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
               });
             },
             backgroundColor: const Color(0xFF2A2A3E),
-            selectedColor: const Color(0xFFFFD700).withOpacity(0.2),
+            selectedColor: const Color(0xFFFFD700).withValues(alpha: 0.2),
             side: BorderSide(
               color: isSelected
                   ? const Color(0xFFFFD700)
@@ -341,7 +341,7 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: vehicleColor.withOpacity(0.2),
+                      color: vehicleColor.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(

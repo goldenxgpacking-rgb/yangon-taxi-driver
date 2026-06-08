@@ -28,7 +28,7 @@ dependencies:
   provider: ^6.1.1
   shared_preferences: ^2.3.2
 
-  # 地图
+  # 地图 (OpenStreetMap - free, no API key)
   flutter_map: ^7.0.2
   latlong2: ^0.9.1
 
@@ -36,13 +36,6 @@ dependencies:
   http: ^1.1.0
   url_launcher: ^6.3.1
   package_info_plus: ^8.1.0
-  geolocator: ^13.0.2
-
-  # 推送通知
-  flutter_local_notifications: ^18.0.1
-
-  # OTP 自动填入
-  sms_autofill: ^2.4.1
   pin_code_fields: ^8.0.1
 
   # 多语言

@@ -1,120 +1,147 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-/// Notification service using flutter_local_notifications.
-/// Simple, reliable, no complex setup required.
+/// Lightweight notification service using in-app overlay banners.
+/// No platform plugin needed - works reliably on all Flutter versions.
 class NotificationService {
-  static final FlutterLocalNotificationsPlugin _plugin =
-      FlutterLocalNotificationsPlugin();
-
+  static final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
   static bool _initialized = false;
 
-  /// Initialize the notification plugin
+  static GlobalKey<NavigatorState> get navigatorKey => _navigatorKey;
+
+  /// Initialize the notification service
   static Future<void> initialize() async {
-    if (_initialized) return;
-
-    const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
-    const initSettings = InitializationSettings(android: androidSettings);
-
-    await _plugin.initialize(
-      initSettings,
-      onDidReceiveNotificationResponse: (NotificationResponse response) {
-        // Handle notification tap
-        debugPrint('Notification tapped: ${response.payload}');
-      },
-    );
-
     _initialized = true;
   }
 
-  /// Request notification permissions (Android 13+)
+  /// Request notification permissions (no-op for in-app notifications)
   static Future<bool> requestPermissions() async {
-    final androidPlugin = _plugin.resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>();
-    if (androidPlugin != null) {
-      return await androidPlugin.requestNotificationsPermission() ?? false;
-    }
     return true;
   }
 
+  /// Show an in-app notification banner
+  static void showInAppBanner({
+    required String title,
+    required String body,
+    Color? color,
+    Duration duration = const Duration(seconds: 4),
+    VoidCallback? onTap,
+  }) {
+    final context = _navigatorKey.currentContext;
+    if (context == null || !context.mounted) return;
+
+    final overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        top: MediaQuery.of(context).padding.top + 8,
+        left: 16,
+        right: 16,
+        child: Material(
+          color: Colors.transparent,
+          child: SafeArea(
+            child: GestureDetector(
+              onTap: () {
+                overlayEntry.remove();
+                onTap?.call();
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                decoration: BoxDecoration(
+                  color: color ?? const Color(0xFFFFD700),
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.3),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.notifications_active, color: Colors.black87, size: 24),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            title,
+                            style: const TextStyle(
+                              color: Colors.black87,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                          ),
+                          Text(
+                            body,
+                            style: TextStyle(
+                              color: Colors.black54,
+                              fontSize: 12,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Icon(Icons.close, color: Colors.black38, size: 18),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    Overlay.of(context).insert(overlayEntry);
+
+    // Auto-dismiss after duration
+    Future.delayed(duration, () {
+      if (overlayEntry.mounted) {
+        overlayEntry.remove();
+      }
+    });
+  }
+
   /// Show notification when a new order arrives
-  static Future<void> showNewOrderNotification({
+  static void showNewOrderNotification({
     required String orderId,
     required String passengerName,
     required String pickupAddress,
-  }) async {
-    const androidDetails = AndroidNotificationDetails(
-      'new_order',
-      'New Order',
-      channelDescription: 'Notify when a new order arrives',
-      importance: Importance.high,
-      priority: Priority.high,
-      color: Color(0xFFFFD700),
-    );
-    const notificationDetails = NotificationDetails(android: androidDetails);
-
-    await _plugin.show(
-      orderId.hashCode & 0x7FFFFFFF,
-      'New Order Received!',
-      '$passengerName - $pickupAddress',
-      notificationDetails,
-      payload: orderId,
+  }) {
+    showInAppBanner(
+      title: '🚕 New Order!',
+      body: '$passengerName - $pickupAddress',
+      color: Colors.green,
+      onTap: () {
+        debugPrint('Tapped new order notification: $orderId');
+      },
     );
   }
 
   /// Show notification when order is accepted
-  static Future<void> showOrderAcceptedNotification({
+  static void showOrderAcceptedNotification({
     required String orderId,
     required String passengerName,
-  }) async {
-    const androidDetails = AndroidNotificationDetails(
-      'order_status',
-      'Order Status',
-      channelDescription: 'Order acceptance/completion updates',
-      importance: Importance.defaultImportance,
-      priority: Priority.defaultPriority,
-    );
-    const notificationDetails = NotificationDetails(android: androidDetails);
-
-    await _plugin.show(
-      orderId.hashCode & 0x7FFFFFFF,
-      'Order Accepted',
-      'You accepted $passengerName\'s order',
-      notificationDetails,
-      payload: orderId,
+  }) {
+    showInAppBanner(
+      title: '✅ Order Accepted',
+      body: "You accepted $passengerName's order",
+      color: Colors.blue,
     );
   }
 
   /// Show a simple notification
-  static Future<void> showNotification({
+  static void showNotification({
     required String title,
     required String body,
-    String channelKey = 'order_status',
-  }) async {
-    final androidDetails = AndroidNotificationDetails(
-      channelKey,
-      channelKey == 'new_order' ? 'New Order' : 'Order Status',
-      channelDescription: 'App notifications',
-      importance: Importance.defaultImportance,
-      priority: Priority.defaultPriority,
-    );
-    final notificationDetails = NotificationDetails(android: androidDetails);
-
-    await _plugin.show(
-      title.hashCode & 0x7FFFFFFF,
-      title,
-      body,
-      notificationDetails,
-    );
+  }) {
+    showInAppBanner(title: title, body: body);
   }
 
-  /// Cancel a specific notification
-  static Future<void> cancelNotification(int id) async {
-    await _plugin.cancel(id);
-  }
-
-  /// Cancel all notifications
-  static Future<void> cancelAllNotifications() async {
-    await _plugin.cancelAll();
+  /// Cancel all notifications (no-op for in-app)
+  static void cancelAllNotifications() {
+    // In-app banners auto-dismiss
   }
 }

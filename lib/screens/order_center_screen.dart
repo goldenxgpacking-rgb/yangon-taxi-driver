@@ -259,7 +259,7 @@ class _OrderCenterScreenState extends State<OrderCenterScreen> {
                     vertical: 6,
                   ),
                   decoration: BoxDecoration(
-                    color: vehicleColor.withOpacity(0.2),
+                    color: vehicleColor.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(

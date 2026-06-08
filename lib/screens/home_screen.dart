@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'login_screen.dart';
@@ -128,12 +128,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       end: Alignment.bottomRight,
                       colors: _isOnline
                           ? [
-                              Colors.green.withOpacity(0.3),
-                              Colors.green.withOpacity(0.1),
+                              Colors.green.withValues(alpha: 0.3),
+                              Colors.green.withValues(alpha: 0.1),
                             ]
                           : [
-                              Colors.grey[800]!.withOpacity(0.3),
-                              Colors.grey[900]!.withOpacity(0.1),
+                              Colors.grey[800]!.withValues(alpha: 0.3),
+                              Colors.grey[900]!.withValues(alpha: 0.1),
                             ],
                     ),
                     borderRadius: BorderRadius.circular(20),
@@ -469,9 +469,9 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 14),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.15),
+          color: color.withValues(alpha: 0.15),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: color.withOpacity(0.3)),
+          border: Border.all(color: color.withValues(alpha: 0.3)),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

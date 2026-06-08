@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../services/wallet_service.dart';
 import 'withdraw_screen.dart';
@@ -113,7 +113,7 @@ class WalletScreen extends StatelessWidget {
           Text(
             'Wallet Balance',
             style: GoogleFonts.poppins(
-              color: const Color(0xFF1A1A2E).withOpacity(0.7),
+              color: const Color(0xFF1A1A2E).withValues(alpha: 0.7),
               fontSize: 13,
             ),
           ),
@@ -130,7 +130,7 @@ class WalletScreen extends StatelessWidget {
           Text(
             'Available for withdrawal',
             style: GoogleFonts.poppins(
-              color: const Color(0xFF1A1A2E).withOpacity(0.6),
+              color: const Color(0xFF1A1A2E).withValues(alpha: 0.6),
               fontSize: 11,
             ),
           ),
@@ -148,13 +148,13 @@ class WalletScreen extends StatelessWidget {
           Icon(
             Icons.history,
             size: 48,
-            color: Colors.white.withOpacity(0.2),
+            color: Colors.white.withValues(alpha: 0.2),
           ),
           const SizedBox(height: 12),
           Text(
             'No withdrawal history yet',
             style: GoogleFonts.poppins(
-              color: Colors.white.withOpacity(0.4),
+              color: Colors.white.withValues(alpha: 0.4),
               fontSize: 13,
             ),
           ),
@@ -181,8 +181,8 @@ class WalletScreen extends StatelessWidget {
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: isPending
-                  ? Colors.orange.withOpacity(0.15)
-                  : Colors.green.withOpacity(0.15),
+                  ? Colors.orange.withValues(alpha: 0.15)
+                  : Colors.green.withValues(alpha: 0.15),
               shape: BoxShape.circle,
             ),
             child: Icon(
@@ -210,7 +210,7 @@ class WalletScreen extends StatelessWidget {
                 Text(
                   'To: ${w.kbzPhone}',
                   style: GoogleFonts.poppins(
-                    color: Colors.white.withOpacity(0.5),
+                    color: Colors.white.withValues(alpha: 0.5),
                     fontSize: 11,
                   ),
                 ),
@@ -222,7 +222,7 @@ class WalletScreen extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
-              color: _getStatusColor(w.status).withOpacity(0.15),
+              color: _getStatusColor(w.status).withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(

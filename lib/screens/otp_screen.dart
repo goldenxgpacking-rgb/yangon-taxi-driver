@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:sms_autofill/sms_autofill.dart';
 import 'driver_profile_screen.dart';
 
 class OTPScreen extends StatefulWidget {
@@ -25,12 +24,7 @@ class _OTPScreenState extends State<OTPScreen> with CodeAutoFill {
     super.initState();
     _pinController = TextEditingController();
     _startResendTimer();
-    _initSmsAutoFill();
     _simulateAutoFill(); // 测试用：2秒后自动填入
-  }
-
-  void _initSmsAutoFill() {
-    listenForCode();
   }
 
   // 自动填入测试验证码（模拟真实 SMS 读取）
@@ -178,11 +172,11 @@ class _OTPScreenState extends State<OTPScreen> with CodeAutoFill {
                   borderRadius: BorderRadius.circular(12),
                   fieldHeight: 56,
                   fieldWidth: 48,
-                  activeFillColor: Colors.white.withOpacity(0.1),
-                  inactiveFillColor: Colors.white.withOpacity(0.05),
-                  selectedFillColor: const Color(0xFFFFD700).withOpacity(0.2),
+                  activeFillColor: Colors.white.withValues(alpha: 0.1),
+                  inactiveFillColor: Colors.white.withValues(alpha: 0.05),
+                  selectedFillColor: const Color(0xFFFFD700).withValues(alpha: 0.2),
                   activeColor: const Color(0xFFFFD700),
-                  inactiveColor: Colors.white.withOpacity(0.3),
+                  inactiveColor: Colors.white.withValues(alpha: 0.3),
                   selectedColor: const Color(0xFFFFD700),
                 ),
                 textStyle: GoogleFonts.poppins(
